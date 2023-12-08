@@ -1,0 +1,26 @@
+<?php
+declare(strict_types=1);
+
+use Yireo\MageWireBackendConfigSearch\Magewire\ConfigSearch;
+
+/** @var ConfigSearch $magewire */
+$searchResults = $magewire->getSearchResults();
+?>
+<div class="search-global">
+    <div class="search-global-field">
+        <input wire:model="search" class="admin__control-text data-grid-search-control"
+               placeholder="Search configuration path"/>
+        <?php if ($searchResults): ?>
+            <div class="autocomplete-results">
+                <ul class="search-global-menu">
+                    <?php foreach ($searchResults as $searchResult): ?>
+                        <li class="item">
+                            <?php /* @var \Magento\Framework\App\Config\Value $searchResult */ ?>
+                            <a href="<?= $magewire->getUrl($searchResult); ?>"><?= $searchResult->getPath(); ?></a>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endif; ?>
+    </div>
+</div>
