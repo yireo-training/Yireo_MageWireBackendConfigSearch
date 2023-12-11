@@ -2,43 +2,30 @@
 
 namespace Yireo\MageWireBackendConfigSearch\Magewire;
 
-use Magento\Backend\Model\UrlFactory;
-use Magento\Config\Model\ResourceModel\Config\Data\CollectionFactory;
-use Magento\Config\Model\ResourceModel\Config\Data\Collection;
+
 use Magento\Framework\App\Config\Value;
 use Magewirephp\Magewire\Component;
+use Yireo\MageWireBackendConfigSearch\Search\Result;
+use Yireo\MageWireBackendConfigSearch\Search\ResultCollector;
 
 class ConfigSearch extends Component
 {
-    public string $search = '';
+    public string $search = 'checkout';
 
     public function __construct(
-        private CollectionFactory $collectionFactory,
-        private UrlFactory $urlFactory
+        private ResultCollector $resultCollector
     ) {
     }
 
-    public function getSearchResults(): ?Collection
+    /**
+     * @return Result[]
+     */
+    public function getSearchResults(): array
     {
         if (strlen($this->search) < 3) {
-            return null;
+            return [];
         }
 
-        $collection = $this->collectionFactory->create();
-        $collection->addFieldToFilter('path', ['like' => '%'.$this->search.'%']);
-        return $collection;
-    }
-
-    /**
-     * @param Value $configValue
-     * @return string
-     */
-    public function getUrl(Value $configValue): string
-    {
-        $path = $configValue->getPath();
-        $pathParts = explode('/', $path);
-        $section = reset($pathParts);
-        $routePath = 'admin/system_config/edit/section/' . $section;
-        return $this->urlFactory->create()->getUrl($routePath);
+        return $this->resultCollector->getResults($this->search);
     }
 }

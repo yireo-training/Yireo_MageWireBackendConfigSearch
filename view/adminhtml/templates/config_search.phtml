@@ -5,18 +5,28 @@ use Yireo\MageWireBackendConfigSearch\Magewire\ConfigSearch;
 
 /** @var ConfigSearch $magewire */
 $searchResults = $magewire->getSearchResults();
+$currentSearch = $magewire->search;
 ?>
-<div class="search-global">
+<div class="search-global magewire-config-search">
     <div class="search-global-field">
-        <input wire:model="search" class="admin__control-text data-grid-search-control"
+        <input wire:model.lazy="search" class="admin__control-text data-grid-search-control"
                placeholder="Search configuration path"/>
+        <?php if ($currentSearch && empty($searchResults)): ?>
+            <div class="autocomplete-results">
+                <ul class="search-global-menu">
+                    <li class="item">No results yet</li>
+                </ul>
+            </div>
+        <?php endif; ?>
+
         <?php if ($searchResults): ?>
             <div class="autocomplete-results">
                 <ul class="search-global-menu">
                     <?php foreach ($searchResults as $searchResult): ?>
                         <li class="item">
-                            <?php /* @var \Magento\Framework\App\Config\Value $searchResult */ ?>
-                            <a href="<?= $magewire->getUrl($searchResult); ?>"><?= $searchResult->getPath(); ?></a>
+                            <a href="<?= $searchResult->getUrl(); ?>">
+                                <?= $searchResult->getPath(); ?>
+                            </a>
                         </li>
                     <?php endforeach; ?>
                 </ul>
@@ -24,3 +34,13 @@ $searchResults = $magewire->getSearchResults();
         <?php endif; ?>
     </div>
 </div>
+
+<style>
+    .magewire-config-search {
+        z-index: 490;
+    }
+
+    .magewire-config-search .search-global-field .autocomplete-results {
+        width: 60rem;
+    }
+</style>
