@@ -24,9 +24,15 @@ $currentSearch = $magewire->search;
                 <ul class="search-global-menu">
                     <?php foreach ($searchResults as $searchResult): ?>
                         <li class="item">
+                            <?php if ( $searchResult->getSection()): ?>
+                            <strong><?= $searchResult->getSection()?->getLabel() ?></strong>
                             <a href="<?= $searchResult->getUrl(); ?>">
-                                <?= $searchResult->getPath(); ?>
+                                <code><?= $searchResult->getPath(); ?></code>
                             </a>
+                            <?php else: ?>
+                                <strong><?= __('Unknown section') ?></strong>
+                                    <code><?= $searchResult->getPath(); ?></code>
+                            <?php endif; ?>
                         </li>
                     <?php endforeach; ?>
                 </ul>

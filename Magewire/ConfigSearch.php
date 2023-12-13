@@ -2,15 +2,13 @@
 
 namespace Yireo\MageWireBackendConfigSearch\Magewire;
 
-
-use Magento\Framework\App\Config\Value;
 use Magewirephp\Magewire\Component;
 use Yireo\MageWireBackendConfigSearch\Search\Result;
 use Yireo\MageWireBackendConfigSearch\Search\ResultCollector;
 
 class ConfigSearch extends Component
 {
-    public string $search = 'checkout';
+    public string $search = '';
 
     public function __construct(
         private ResultCollector $resultCollector
