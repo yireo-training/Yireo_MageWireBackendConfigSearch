@@ -28,9 +28,10 @@ class Result
      */
     public function getUrl(): string
     {
-        $routePath = 'admin/system_config/edit/section/'.$this->getSectionName();
-
-        return $this->urlFactory->create()->getUrl($routePath);
+        return $this->urlFactory->create()->getUrl('adminhtml/system_config', [
+            'section' => $this->getSectionName(),
+            'group' => $this->getGroupName(),
+        ]);
     }
 
     /**
@@ -39,8 +40,17 @@ class Result
     private function getSectionName(): string
     {
         $pathParts = explode('/', $this->path);
+        return $pathParts[0];
+    }
 
-        return reset($pathParts);
+
+    /**
+     * @return string
+     */
+    private function getGroupName(): string
+    {
+        $pathParts = explode('/', $this->path);
+        return $pathParts[1];
     }
 
     /**
@@ -54,6 +64,14 @@ class Result
         foreach ($this->configStructure->getTabs() as $tab) {
             /** @var Section $section */
             foreach ($tab->getChildren() as $section) {
+                if (false === $section->isAllowed()) {
+                    continue;
+                }
+
+                if (false === $section->isVisible()) {
+                    continue;
+                }
+
                 if (trim($section->getPath(), '/') === $sectionName) {
                     return $section;
                 }

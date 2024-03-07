@@ -7,9 +7,10 @@ use Yireo\MageWireBackendConfigSearch\Magewire\ConfigSearch;
 $searchResults = $magewire->getSearchResults();
 $currentSearch = $magewire->search;
 ?>
-<div class="search-global magewire-config-search">
+<div class="search-global magewire-config-search" id="magewire-config-search">
     <div class="search-global-field">
         <input wire:model.lazy="search" class="admin__control-text data-grid-search-control"
+               id="magewire-config-search-input"
                placeholder="Search configuration path"/>
         <?php if ($currentSearch && empty($searchResults)): ?>
             <div class="autocomplete-results">
@@ -39,14 +40,22 @@ $currentSearch = $magewire->search;
             </div>
         <?php endif; ?>
     </div>
+
+    <style>
+        .magewire-config-search {
+            z-index: 490;
+        }
+
+        .magewire-config-search .search-global-field .autocomplete-results {
+            width: 60rem;
+        }
+    </style>
+
+    <script>
+        require(['jquery'], function($) {
+            $('#magewire-config-search').on('focusout', function () {
+                Magewire.find('magewire.config.search').set('search', '');
+            });
+        });
+    </script>
 </div>
-
-<style>
-    .magewire-config-search {
-        z-index: 490;
-    }
-
-    .magewire-config-search .search-global-field .autocomplete-results {
-        width: 60rem;
-    }
-</style>
