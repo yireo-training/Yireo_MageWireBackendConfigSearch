@@ -1,61 +1,6 @@
-<?php
-declare(strict_types=1);
-
-use Yireo\MageWireBackendConfigSearch\Magewire\ConfigSearch;
-
-/** @var ConfigSearch $magewire */
-$searchResults = $magewire->getSearchResults();
-$currentSearch = $magewire->search;
-?>
-<div class="search-global magewire-config-search" id="magewire-config-search">
-    <div class="search-global-field">
-        <input wire:model.lazy="search" class="admin__control-text data-grid-search-control"
-               id="magewire-config-search-input"
-               placeholder="Search configuration path"/>
-        <?php if ($currentSearch && empty($searchResults)): ?>
-            <div class="autocomplete-results">
-                <ul class="search-global-menu">
-                    <li class="item">No results yet</li>
-                </ul>
-            </div>
-        <?php endif; ?>
-
-        <?php if ($searchResults): ?>
-            <div class="autocomplete-results">
-                <ul class="search-global-menu">
-                    <?php foreach ($searchResults as $searchResult): ?>
-                        <li class="item">
-                            <?php if ( $searchResult->getSection()): ?>
-                            <strong><?= $searchResult->getSection()?->getLabel() ?></strong>
-                            <a href="<?= $searchResult->getUrl(); ?>">
-                                <code><?= $searchResult->getPath(); ?></code>
-                            </a>
-                            <?php else: ?>
-                                <strong><?= __('Unknown section') ?></strong>
-                                    <code><?= $searchResult->getPath(); ?></code>
-                            <?php endif; ?>
-                        </li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
-        <?php endif; ?>
-    </div>
-
-    <style>
-        .magewire-config-search {
-            z-index: 490;
-        }
-
-        .magewire-config-search .search-global-field .autocomplete-results {
-            width: 60rem;
-        }
-    </style>
-
-    <script>
+<?php declare(strict_types=1); use Yireo\MageWireBackendConfigSearch\Magewire\ConfigSearch; /** @var ConfigSearch $magewire */ $searchResults = $magewire->getSearchResults(); $currentSearch = $magewire->search; ?> <div class="search-global magewire-config-search" id="magewire-config-search"><div class="search-global-field"><input wire:model.lazy="search" class="admin__control-text data-grid-search-control" id="magewire-config-search-input" placeholder="Search configuration path"/><?php if ($currentSearch && empty($searchResults)): ?> <div class="autocomplete-results"><ul class="search-global-menu"><li class="item">No results yet</li></ul></div><?php endif; ?> <?php if ($searchResults): ?> <div class="autocomplete-results"><ul class="search-global-menu"><?php foreach ($searchResults as $searchResult): ?> <li class="item"><?php if ( $searchResult->getSection()): ?> <strong><?= $searchResult->getSection()?->getLabel() ?></strong> <a href="<?= $searchResult->getUrl(); ?>"><code><?= $searchResult->getPath(); ?></code></a> <?php else: ?> <strong><?= __('Unknown section') ?></strong> <code><?= $searchResult->getPath(); ?></code> <?php endif; ?></li> <?php endforeach; ?></ul></div><?php endif; ?></div><style> .magewire-config-search { z-index: 490; } .magewire-config-search .search-global-field .autocomplete-results { width: 60rem; }</style><script>
         require(['jquery'], function($) {
             $('#magewire-config-search').on('focusout', function () {
                 Magewire.find('magewire.config.search').set('search', '');
             });
-        });
-    </script>
-</div>
+        });</script></div>
